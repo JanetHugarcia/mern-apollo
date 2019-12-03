@@ -1,11 +1,11 @@
     type Client {
         id: ID
-        name: String
-        surname: String
-        age: Int
-        enterprise: String
-        email: String
-        type: TypeClient
+        name: String!
+        surname: String!
+        age: Int!
+        enterprise: String!
+        emails: [Email]
+        type: TypeClient!
         orders: [Order]
     }
 
@@ -39,12 +39,12 @@
 
     input ClientInput {
         id: ID
-        name!: String
-        surname!: String
-        age!: Int
-        enterprise!: String
-        email: String
-        type!: TypeClient!
+        name: String!
+        surname: String!
+        age: Int!
+        enterprise: String!
+        emails: [EmailInput]
+        type: TypeClient!
         orders: [OrderInput]
     }
 

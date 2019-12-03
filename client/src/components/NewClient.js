@@ -8,10 +8,33 @@ const NewClient = (props) => {
         surname: "",
         enterprise: "",
         age: "",
-        email: "",
+        // email: "",
         type: ""
     });
     const [ error, setError ] = useState(false);
+    const [ emails, setEmails ] = useState([]);
+
+    const newInput = () => {
+        setEmails(emails.concat([{email: ''}]))
+        console.log('hiciste click');
+    }
+
+    const quitInput = i => ()=> {
+        setEmails(emails.filter((email, index) => i !== index))
+    }
+
+    const readInput = i => e => {
+        console.log(i);
+        console.log(e.target.value);
+        const newEmails = emails.map((email, index) => {
+            if (i !== index) return email;
+            return {
+                ...email,
+                email: e.target.value
+            }
+        })
+        setEmails(newEmails)
+    }
 
 return (
     <>
@@ -32,7 +55,7 @@ return (
                     className="col-md-8 m-3"
                     onSubmit={ e => {
                         e.preventDefault();
-                        const { name, surname, enterprise, age, email, type } = client;
+                        const { name, surname, enterprise, age, type } = client;
                         if ( name ==="" || surname ==="" || enterprise==="" || age==="" || type==="") {
                             setError(true);
                             return;
@@ -43,7 +66,7 @@ return (
                             surname,
                             enterprise,
                             age: Number(age),
-                            email,
+                            emails,
                             type
                         };
                         createClient({
@@ -84,7 +107,7 @@ return (
                         </div>
                     </div>
                     <div className="form-row">
-                        <div className="form-group col-md-6">
+                        <div className="form-group col-md-12">
                             <label>Empresa</label>
                             <input
                                 type="text"
@@ -99,20 +122,34 @@ return (
                                 }}
                             />
                         </div>
-                        <div className="form-group col-md-6">
-                            <label>Email</label>
-                            <input
-                                type="email"
-                                className="form-control"
-                                placeholder="Email"
-                                value={client.email}
-                                onChange={e => {
-                                    const val = e.target.value;
-                                    setClient(prevState => {
-                                        return {...prevState, email: val}
-                                    });
-                                }}
-                            />
+                        {
+                            emails.map((input, index) => (
+                                <div key={index} className="form-group col-md-12">
+                                    <label>Correo: {index + 1}</label>
+                                    <div className="input-group">
+                                        <input
+                                            onChange={readInput(index)}
+                                            type="email"
+                                            placeholder="Email"
+                                            className="form-control"
+                                        />
+                                        <div className="input-group-append">
+                                            <button
+                                                onClick={quitInput(index)}
+                                                type="button"
+                                                className="btn btn-danger"
+                                            > &times; Eliminar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                        <div className="form-group d-flex justify-content-center col-md-12">
+                            <button
+                                onClick={newInput}
+                                type="button"
+                                className="btn btn-warning"
+                            >+ Agregar Email</button>
                         </div>
                     </div>
                     <div className="form-row">
